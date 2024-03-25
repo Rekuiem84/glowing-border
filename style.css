@@ -1,0 +1,82 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+body {
+	font-family: system-ui, "Helvetica Neue", sans-serif;
+	background: rgb(14, 14, 15);
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	min-height: 100vh;
+}
+@property --angle {
+	syntax: "<angle>";
+	inherits: false;
+	initial-value: 0deg;
+}
+.card {
+	--border-radius: 16px;
+	--border-width: 6px;
+
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+	font-size: 2.2rem;
+	width: 16ch;
+	aspect-ratio: 2/3;
+	background: rgb(14, 14, 15);
+	color: white;
+	padding: 0.5em;
+	border-radius: var(--border-radius);
+}
+.card:first-child {
+	--color1: rgb(241, 18, 111);
+	--color2: rgb(240, 191, 12);
+	--gradient: var(--color1), var(--color2), var(--color1);
+}
+.card:nth-child(2) {
+	--color1: rgb(18, 241, 107);
+	--color2: rgb(32, 137, 229);
+	--color3: rgb(153, 20, 242);
+	--gradient: var(--color1), var(--color2), var(--color3), var(--color1);
+}
+.card::before,
+.card::after {
+	content: "";
+	position: absolute;
+	border-radius: calc(var(--border-radius) + var(--border-width));
+	z-index: -1;
+
+	inset: calc(-1 * var(--border-width));
+	background: conic-gradient(from var(--angle, 0deg), var(--gradient));
+	animation: rotate 10s linear infinite;
+}
+.card::after {
+	filter: blur(calc(2.5 * var(--border-width)));
+}
+@keyframes rotate {
+	to {
+		--angle: 360deg;
+	}
+}
+.card h2 {
+	font-size: 1.2em;
+}
+.card p {
+	font-size: 0.6em;
+}
+.card a {
+	width: fit-content;
+	font-size: 0.6em;
+	padding: 0.5em 1.2em;
+	border-radius: 8px;
+	color: inherit;
+	text-decoration: none;
+	margin-top: auto;
+	border: 3px solid currentColor;
+}
