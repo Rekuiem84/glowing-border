@@ -11,8 +11,12 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
+	flex-wrap: wrap;
+	padding: 2rem;
+	gap: 5rem;
 	min-height: 100vh;
 }
+
 @property --angle {
 	syntax: "<angle>";
 	inherits: false;
@@ -20,30 +24,37 @@ body {
 }
 .card {
 	--border-radius: 16px;
-	--border-width: 6px;
+	--border-width: 8px;
+	--blur-radius: 24px;
+	--animation-duration: 10s;
 
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: 1.2rem;
 	font-size: 2.2rem;
-	width: 16ch;
+	flex-basis: 350px;
 	aspect-ratio: 2/3;
 	background: rgb(14, 14, 15);
 	color: white;
 	padding: 0.5em;
 	border-radius: var(--border-radius);
 }
-.card:first-child {
+.card:nth-of-type(1) {
 	--color1: rgb(241, 18, 111);
 	--color2: rgb(240, 191, 12);
-	--gradient: var(--color1), var(--color2), var(--color1);
+	--color-selection: var(--color1), var(--color2), var(--color1);
 }
-.card:nth-child(2) {
+.card:nth-of-type(2) {
 	--color1: rgb(18, 241, 107);
 	--color2: rgb(32, 137, 229);
-	--color3: rgb(153, 20, 242);
-	--gradient: var(--color1), var(--color2), var(--color3), var(--color1);
+	--color3: rgb(194, 20, 242);
+	--color-selection: var(--color1), var(--color2), var(--color3);
+}
+.card:nth-of-type(3) {
+	--color1: rgb(223, 231, 239);
+	--color2: rgb(146, 147, 155);
+	--color-selection: var(--color1), var(--color2), var(--color1);
 }
 .card::before,
 .card::after {
@@ -53,11 +64,22 @@ body {
 	z-index: -1;
 
 	inset: calc(-1 * var(--border-width));
-	background: conic-gradient(from var(--angle, 0deg), var(--gradient));
-	animation: rotate 10s linear infinite;
+	animation: rotate var(--animation-duration) linear infinite;
+	transition: filter 0.25s ease-in-out;
+}
+.card[data-gradient="radial"]::before,
+.card[data-gradient="radial"]::after {
+	background: conic-gradient(from var(--angle, 0deg), var(--color-selection));
+}
+.card[data-gradient="linear"]::before,
+.card[data-gradient="linear"]::after {
+	background: linear-gradient(var(--angle, 0deg), var(--color-selection));
 }
 .card::after {
 	filter: blur(calc(2.5 * var(--border-width)));
+}
+.card:is(:hover, :focus-within):after {
+	filter: blur(calc(4.5 * var(--border-width)));
 }
 @keyframes rotate {
 	to {
@@ -79,4 +101,10 @@ body {
 	text-decoration: none;
 	margin-top: auto;
 	border: 3px solid currentColor;
+	transition: 0.1s ease-in;
+
+	&:is(:hover, :focus-visible) {
+		background: white;
+		color: rgb(14, 14, 15);
+	}
 }
